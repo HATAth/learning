@@ -1,0 +1,51 @@
+# 課題81
+
+## 問題
+
+81. 「追加」ボタンを押した時に追加されるdivタグ（以降アイテムと呼ぶ）を押した際、そのアイテムが持つクラスを「completed-todo-item」に変更するように修正してください
+
+    また、「未完了のタスク数」を計算し直す様にしてください
+
+## プログラムリスト
+
+```javascript
+let todo_count;
+
+function Addtodo() {
+    const inputname = document.getElementById("addname")
+
+    let addtodo = document.createElement("div");
+    addtodo.className = "todo-item";
+    addtodo.innerText = inputname.value;
+
+    document.body.appendChild(addtodo);
+    inputname.value = '';
+
+    todo_count = document.getElementsByClassName("todo-item").length;
+    document.getElementById("num_of_todo").textContent = todo_count;
+
+    addtodo.setAttribute("onclick", "Completed(this)"); //生成されたaddtodoに属性 onclick = "Completed(this)" を追加する
+}
+
+//thisで指定された、つまりクリックされたタグのclass名を変更し、todo-itemの個数を再計算し、表示させる。
+function Completed(element){
+    element.className = "completed-todo-item";
+    todo_count = document.getElementsByClassName("todo-item").length;
+    document.getElementById("num_of_todo").textContent = todo_count;
+}   
+```
+
+## 結果
+
+![][def1]
+
+qwertをクリックした直後
+![][def2]
+
+![][def3]
+
+[def1]: https://lh3.googleusercontent.com/pw/AJFCJaU6G-Z8mKgzUiqTlCBhT6dUWzApbzCyGxzbwfEPMZhYlDjPfnxXY0cqO41g2xntXsgYS0Ez2OpGFgz10KgmlFTiFY5Jvq3Pu7mqGPNrVhJaqXYeroO-Ad3nZQl_8lzg6ZdSzIZ8taXs3r6ZwF5vlLzKwdoRtRNSDjzxSdb86hxjzBF5MDXZPxk098Ld90SZotJB2uetJk9huc6X8TeAAKVx8xnJvNb7AHtauCZTEZecX3wCWuJHpSS_qyQfwW2tJlXdOh5yhDeoAvaQW3SDqVsg_lWytXOLS4ukZxN0eQ52foktsjy_zmv_lcyWsNw-Rg-9pJs4dPKpWxjWqms4H-GX7cZZQw9CGQVmAAnWEJcRqic5HmSdlEyeWPT_yVFAAvf8uHJ1QsRYdL6dquA1i6SvdF07iOodGW284EB8HvyYuz9LlXPRsUIVXsOrLuYZLYRQ2R5bEmlAVkMUWFO1KxrWQjIay_-uMfoh4av8577jlMG43IJEn_tQ6HCSB-F-IglZmvn7Jis8fXe3OrKY5_gfm01D8mkrBARTgUurd-ciFhuUrvYie06ntO6nOmhwlGmuwUW32TvFkwOskbukevzgLLjO520kQntjEQYdO67Eosyi7xfSzBUshgZZAeRGN-NMrpS6kLW23X6oRsUvNeC1O-GXA3B57ccA4yde9xC0e89NVXHcD6oji8u0uWH_WtgesGQMmx1XgdZLHYF9Z3jb97Lz01s1hLPqO69V6kPhKSM2lXA69Z9uUhrUmeWP6dTcJpmz5COZy9AjkHR7BYBZMmCKY31x1rQSV7ABPdKbLTZKcQUrQBMtgLrnckdwXuqM6UGy8wYujiUQWJcu4MGN4kWVWfL5loaINnFow2JZSEKzoD_mCE0NQoxpfwGCTh_4OfT942jbKXjdNMhr=w1764-h1328-s-no?authuser=0
+
+[def2]: https://lh3.googleusercontent.com/pw/AJFCJaWm0qm2KcXyKMroPLn8VlRYQ4b809IAWZaTRAVFfxpA3QZOAwSSrJ9BxkTkbPiF__zmTX6qrfAniv7IBON5E2n6UrNjN6K4zvAy_uBBS-YQyVQD5Y52xnTWObp-uLq2u41sO92IMymAXbVkmzr4fRKd5qFG9TNBbOj3YDRKluq6t8V4ixwQnuPEmpHJSpHAEol6a7cO6STCw0tGJ68WYCFm5e0wXTNE-tcTEa9UQRKmsM5NNHSK8wjvL8Pkk2bU8j5JA-5zemzRnMIFB1e15hSfjtwrEB661tui8WDn2UZSPKvr7RHjxTbrBfW5wAWsQVIRrtW3eNmWhvw7Kl6fUOidSdpCbjfr_eL9EC9yI30KKj5bOyJOZVT9DutmH8sEGc3-ar1LCyY_IcCYcv6l7_j8YusZPvF-5npf-HHuK33X5c2RbUAQiBcz0Ayr7GMesIoGAIsC7PLJ0FJr6OsHKSBM6wahsCOiwkJEbI5TwQaYweRmy6G0-qx4jUPT-Tci5AcQsGz58B2_Swlhr476UqQvFNIajTbwXy8nU1T7StTRgHSxocongyz30zSzctuCo7ysrJcEELnYbduWSxPNAY6XfyNW9TDOa9XTOU-93iPeeGfrBOGLM_hZC1-N3KiZVQ5i1fe69x_NyoAKW2gt_OO3HZKrT8GWdEUB1WB5SAOTvMjSD86aBlm51i7Pe0h111GWbqb04lvQ1S6jcAWjcEwR3hF_s_fkxBChSdc89rS2nngO379SKDPk8qLdiCIdCiCualCpq1W-5tg8tD5q3ATIB5P55t_20qdzuC2F5zlBLG-qEvYPt84KL8NjEbuUtAbGiaiWXju0u-xwb98Pm5x9ZuCD_LI2pu4S5PdBoV52Y95-hA7UBneaFSIJUaEEqXYzhA0uiQRJmbJtRRiE=w1312-h1020-s-no?authuser=0
+
+[def3]: https://lh3.googleusercontent.com/pw/AJFCJaUjn6QNIKGpMRF4p1lnbqRlvKfpqH0eVgdg9OoyM8CAfPuSZDe0v9ZtKyYUqrsfLxTHuOqF5kmWYH5ZOZkrUnNjU6QEDiPKpzRhYIqbXyeh5nD5v8HTu5uaJghhCbjlyW81TWqr2tJbpmdXqlVwGqrQFz2R4ikcytabn6cxoIycCgVofSR1AARnDYATEGLQfYJWvxRwEDYKcHzIaOVwg92u61iBYzDKzOGW8ExKcxUlJsSh-LKMYd-Wy6ELun9jA5D0C346CAyyqYJIpufSCPKcWRAQ-l_eGxPOAwbWy2ImMk6l_aCpSemE3zVPW2fWWma3zjKIiWz-LBt-i7sO0b2AlxJiQVm9RTlkFJ7cdDpSCo4_f5g6c4LRyXCw9kLWpz6SM8C7Nr8qF9mdh93nDTggKuvvD4vx4KAEiPH5_UG7zOQOYUcXOp0D_xPPJ4JZlAFCoqOxPh8_q5SXAqP0_gvDMykfwfrtiPmtBZ-RfkCkzHBRbqZhJyka70Hnw5w6JLpaIMhG04SERXZN7U-sgjY3fTnlZzYu2EqXJa01LXrJycZW2PkIOJC95EbtRM-cKKpYk2UdSlQG9KganpX8m9_uIWpsx9r6lZuhXJDryrxfykJv5Bw1GL2xvTuvMt5b5cXRPzGsaO9MfsHX83385fXB00G_Zo9O0xc3rabWa2CbB8WnvHZjHepQN2LcYlY2eySRV5Uk_Kxyk2W9QJYgdRgpXVTqd8a3NOcdUrd0Ih_GV6PdkR0d8GcZCaNDgkFQB58yKtPEQknK6ahkjXuJyx2wc3vl0SbApKy6pj2lwSshnBkrb7NDKACWPDjn0IE6bu-sV-G8HQvZmXKQZgk4hWgau1JG5ClcW8CyQGV_JnSiezPNxIQh41JtaTO-OYikaLs71JNWfw98lrgNfMxi=w1316-h952-s-no?authuser=0
