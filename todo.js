@@ -16,15 +16,9 @@ function Addtodo() {
     addtodo.setAttribute("onclick", "Completed(this)"); //生成されたaddtodoに属性 onclick = "Completed(this)" を追加する
 }
 
-//thisで指定された、つまりクリックされたタグのclass名を変更する。
+//thisで指定された、つまりクリックされたタグのclass名を変更し、todo-itemの個数を再計算し、表示させる。
 function Completed(element){
     element.className = "completed-todo-item";
     todo_count = document.getElementsByClassName("todo-item").length;
     document.getElementById("num_of_todo").textContent = todo_count;
 }   
-
-
-
-
-
-
