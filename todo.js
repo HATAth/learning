@@ -22,7 +22,7 @@ function Completed(element){
         element.className = "completed-todo-item";
     }
     else{
-        element.className = "todo-item";
+        element.className = "todo-item";  //クラス名がtodo-itemであればcomplete-todo-itemに、またその逆を行う。
     }
     todo_count = document.getElementsByClassName("todo-item").length;
     document.getElementById("num_of_todo").textContent = todo_count;
