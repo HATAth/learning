@@ -18,7 +18,12 @@ function Addtodo() {
 
 //thisで指定された、つまりクリックされたタグのclass名を変更し、todo-itemの個数を再計算し、表示させる。
 function Completed(element){
-    element.className = "completed-todo-item";
+    if(element.className === "todo-item"){
+        element.className = "completed-todo-item";
+    }
+    else{
+        element.className = "todo-item";
+    }
     todo_count = document.getElementsByClassName("todo-item").length;
     document.getElementById("num_of_todo").textContent = todo_count;
 }   
