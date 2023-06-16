@@ -1,50 +1,62 @@
-let todo_count;
-let saved_items;
+function addTodo() {
+    const inputName = document.getElementById("addname")
 
-function Addtodo() {
-    const inputname = document.getElementById("addname")
+    let addElement = document.createElement("div");
+    addElement.className = "todo-item";
+    addElement.innerText = inputName.value;
 
-    let addtodo = document.createElement("div");
-    addtodo.className = "todo-item";
-    addtodo.innerText = inputname.value;
+    let deleteButton = document.createElement("button");
+    deleteButton.className = "delete-botton";
+    deleteButton.innerText = "削除"
+    deleteButton.setAttribute("onclick", "deleteItem(this)"); //このボタンがクリックされたら関数deleteItemを実行する
+    addElement.appendChild(deleteButton); //生成されたaddElementに削除ボタンを追加
 
-    document.getElementById("nowitems").appendChild(addtodo); //divタグのnowitemsに追加
-    inputname.value = '';
+    document.getElementById("nowitems").appendChild(addElement); //divタグのnowitemsに追加
+    inputName.value = '';
 
-    Numtodo();
+    updateNumOfTodo();
 
-    addtodo.setAttribute("onclick", "Completed(this)"); //生成されたaddtodoに属性 onclick = "Completed(this)" を追加する
+    addElement.setAttribute("onclick", "completed(this)"); //生成されたaddElementに属性 onclick = "Completed(this)" を追加する
 
-    saved_items = document.getElementById("nowitems").innerHTML; //nowitemsの要素内のhtmlコンテンツ(つまりdivタグ達)の文字列を取得
-    localStorage.setItem("saved", saved_items); //取得した文字列をlocalStorageに保存
+    let savedItems = document.getElementById("nowitems").innerHTML; //nowitemsの要素内のhtmlコンテンツ(つまりdivタグ達)の文字列を取得
+    localStorage.setItem("saved", savedItems); //取得した文字列をlocalStorageに保存
 }
 
 //thisで指定された、つまりクリックされたタグのclass名を変更し、todo-itemの個数を再計算し、表示させる
-function Completed(element){
+function completed(element){
     if(element.className === "todo-item"){
         element.className = "completed-todo-item";
     }
     else{
         element.className = "todo-item";  //クラス名がtodo-itemであればcomplete-todo-itemに、またその逆を行う
     }
-    todo_count = document.getElementsByClassName("todo-item").length;
-    document.getElementById("num_of_todo").textContent = todo_count;
+    let todoCount = document.getElementsByClassName("todo-item").length;
+    document.getElementById("num_of_todo").textContent = todoCount;
 }
 
 //localStorageに保存したdivタグを読み込む。その要素が空でなければnowitemに要素を入れる
-function ReadLocalStorage(){
-    saved_items = localStorage.getItem("saved");
-    if(saved_items){
-        document.getElementById("nowitems").innerHTML = saved_items;
+function readLocalStorage(){
+    let savedItems = localStorage.getItem("saved");
+    if(savedItems){
+        document.getElementById("nowitems").innerHTML = savedItems;
     }
 }
 
 //todo-itemの個数をカウントし、「未完了のタスク」の表示を切り替える
-function Numtodo(){
-    todo_count = document.getElementsByClassName("todo-item").length;
-    document.getElementById("num_of_todo").textContent = todo_count;
+function updateNumOfTodo(){
+    let todoCount = document.getElementsByClassName("todo-item").length;
+    document.getElementById("num_of_todo").textContent = todoCount;
+}
+
+//ボタンをクリックしたitemの表示を削除、LocalStrageからも削除
+function deleteItem(element){
+    element.parentNode.remove(); //ボタンの親のdivタグごと削除
+    let savedItems = document.getElementById("nowitems").innerHTML;
+    localStorage.setItem("saved", savedItems); //削除された今の状態をLocalStrageに保存し直す。
 }
 
 //読み込まれた時の処理
-ReadLocalStorage();
-Numtodo();
+window.onload = (e) => {
+	readLocalStorage();
+	updateNumOfTodo();
+};
