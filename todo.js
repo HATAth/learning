@@ -32,8 +32,7 @@ function addTodo() {
 
     updateNumOfTodo();
 
-    let savedItems = document.getElementById("nowitems").innerHTML; //nowitemsの要素内のhtmlコンテンツ(つまりdivタグ達)の文字列を取得
-    localStorage.setItem("saved", savedItems); //取得した文字列をlocalStorageに保存
+    saveLocalStrage();
 }
 
 //thisで指定された、つまりクリックされたタグのclass名を変更し、todo-itemの個数を再計算し、表示させる
@@ -45,8 +44,15 @@ function completed(element){
         else{
             element.className = "todo-item";  //クラス名がtodo-itemであればcomplete-todo-itemに、またその逆を行う
         }
+        saveLocalStrage();
     }
     updateNumOfTodo();
+}
+
+//localStrageに今のitemを保存する。
+function saveLocalStrage(){
+    let savedItems = document.getElementById("nowitems").innerHTML; //nowitemsの要素内のhtmlコンテンツ(つまりdivタグ達)の文字列を取得
+    localStorage.setItem("saved", savedItems); //取得した文字列をlocalStorageに保存
 }
 
 //localStorageに保存したdivタグを読み込む。その要素が空でなければnowitemに要素を入れる
@@ -66,8 +72,7 @@ function updateNumOfTodo(){
 //削除ボタンをクリックしたitemの表示を削除、LocalStrageからも削除
 function deleteItem(element){
     element.parentNode.remove(); //ボタンの親のdivタグごと削除
-    let savedItems = document.getElementById("nowitems").innerHTML;
-    localStorage.setItem("saved", savedItems); //削除された今の状態をLocalStrageに保存し直す。
+    saveLocalStrage(); //削除された今の状態をLocalStrageに保存し直す。
 }
 
 //編集ボタンをクリックしたitemを編集状態に移らせる
