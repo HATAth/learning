@@ -38,14 +38,15 @@ function addTodo() {
 
 //thisで指定された、つまりクリックされたタグのclass名を変更し、todo-itemの個数を再計算し、表示させる
 function completed(element){
-    if(element.className === "todo-item"){
-        element.className = "completed-todo-item";
+    if(document.getElementsByClassName("edit-item").length == 0){ //他に編集状態にあるitemが存在する場合は実行しない
+        if(element.className === "todo-item"){
+            element.className = "completed-todo-item";
+        }
+        else{
+            element.className = "todo-item";  //クラス名がtodo-itemであればcomplete-todo-itemに、またその逆を行う
+        }
     }
-    else{
-        element.className = "todo-item";  //クラス名がtodo-itemであればcomplete-todo-itemに、またその逆を行う
-    }
-    let todoCount = document.getElementsByClassName("todo-item").length;
-    document.getElementById("num_of_todo").textContent = todoCount;
+    updateNumOfTodo();
 }
 
 //localStorageに保存したdivタグを読み込む。その要素が空でなければnowitemに要素を入れる
@@ -58,7 +59,7 @@ function readLocalStorage(){
 
 //todo-itemの個数をカウントし、「未完了のタスク」の表示を切り替える
 function updateNumOfTodo(){
-    let todoCount = document.getElementsByClassName("todo-item").length;
+    let todoCount = document.getElementsByClassName("todo-item").length + document.getElementsByClassName("edit-item").length;
     document.getElementById("num_of_todo").textContent = todoCount;
 }
 
@@ -85,7 +86,7 @@ function editItem(element){
         editCompleteButton.setAttribute("onclick", "editComplete(this)"); //編集完了ボタンを作成。このボタンがクリックされたら関数editCompleteを実行する
         editMode.appendChild(editCompleteButton);
 
-        element.parentNode.replaceWith(editMode);
+        element.parentNode.replaceWith(editMode); //itemを編集状態にする。
     }
 }
 
