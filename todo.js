@@ -2,7 +2,12 @@
 function newItem(name) {
     let addElement = document.createElement("div");
     addElement.className = "todo-item";
-    addElement.innerText = name;
+
+    let nameOfAddElement = document.createElement("span");
+    nameOfAddElement.className = "item-name";
+    nameOfAddElement.innerText = name;
+    nameOfAddElement.setAttribute("onclick", "completed(this)"); //名前がクリックされたら関数Completedを実行する
+    addElement.appendChild(nameOfAddElement); //itemの名前部分
 
     let deleteButton = document.createElement("button");
     deleteButton.className = "delete-botton";
@@ -16,7 +21,11 @@ function newItem(name) {
     editButton.setAttribute("onclick", "editItem(this)"); //編集ボタンを作成。このボタンがクリックされたら関数editItemを実行する
     addElement.appendChild(editButton); //生成されたaddElementに編集ボタンを追加
 
-    addElement.setAttribute("onclick", "completed(this)"); //生成されたaddElementに属性 onclick = "Completed(this)" を追加する
+    let duplicateButton = document.createElement("button");
+    duplicateButton.className = "duplicate-botton";
+    duplicateButton.innerText = "複製"
+    duplicateButton.setAttribute("onclick", "duplicateItem(this)"); //複製ボタンを作成。このボタンがクリックされたら関数duplicateItemを実行する
+    addElement.appendChild(duplicateButton); //生成されたaddElementに複製ボタンを追加
 
     return addElement;
 }
@@ -31,7 +40,6 @@ function addTodo() {
     inputName.value = '';
 
     updateNumOfTodo();
-
     saveLocalStrage();
 }
 
@@ -73,6 +81,7 @@ function updateNumOfTodo(){
 function deleteItem(element){
     element.parentNode.remove(); //ボタンの親のdivタグごと削除
     saveLocalStrage(); //削除された今の状態をLocalStrageに保存し直す。
+    updateNumOfTodo();
 }
 
 //編集ボタンをクリックしたitemを編集状態に移らせる
@@ -104,6 +113,17 @@ function editComplete(element){
     updateNumOfTodo();    
     let savedItems = document.getElementById("nowitems").innerHTML; //nowitemsの要素内のhtmlコンテンツ(つまりdivタグ達)の文字列を取得
     localStorage.setItem("saved", savedItems); //取得した文字列をlocalStorageに保存
+}
+
+//複製ボタンをクリックしたitemの名前と同じitemを生成する。
+function duplicateItem(element){
+    let eChildren = element.parentNode.children;
+
+    let duplicatedItem = newItem(eChildren[0].innerText); //複製
+    document.getElementById("nowitems").appendChild(duplicatedItem);
+
+    updateNumOfTodo();
+    saveLocalStrage();
 }
 
 //読み込まれた時の処理
