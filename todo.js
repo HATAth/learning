@@ -46,11 +46,11 @@ function addTodo() {
 //thisで指定された、つまりクリックされたタグのclass名を変更し、todo-itemの個数を再計算し、表示させる
 function completed(element){
     if(document.getElementsByClassName("edit-item").length == 0){ //他に編集状態にあるitemが存在する場合は実行しない
-        if(element.className === "todo-item"){
-            element.className = "completed-todo-item";
+        if(element.parentNode.className === "todo-item"){
+            element.parentNode.className = "completed-todo-item";
         }
         else{
-            element.className = "todo-item";  //クラス名がtodo-itemであればcomplete-todo-itemに、またその逆を行う
+            element.parentNode.className = "todo-item";  //クラス名がtodo-itemであればcomplete-todo-itemに、またその逆を行う
         }
         saveLocalStrage();
     }
@@ -87,11 +87,15 @@ function deleteItem(element){
 //編集ボタンをクリックしたitemを編集状態に移らせる
 function editItem(element){
     if(document.getElementsByClassName("edit-item").length == 0){ //他に編集状態にあるitemが存在する場合は実行しない
+        let eChildren = element.parentNode.children;
+        let preItemName = eChildren[0].innerText; //編集前の名前を取得
+
         let editMode = document.createElement("div"); //編集状態
         editMode.className = "edit-item";
 
         let editInput = document.createElement("input");
         editInput.id = "edit-input";
+        editInput.setAttribute("value", preItemName); //はじめは編集前の名前を表示
         editMode.appendChild(editInput); //編集状態のinput部分
 
         let editCompleteButton = document.createElement("button");
