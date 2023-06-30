@@ -1,3 +1,7 @@
 .completed-todo-item{
     text-decoration: line-through;
 }
+
+.delete-checkbox[aria-hidden="true"]{
+    display: none;
+}
