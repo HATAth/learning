@@ -1,3 +1,5 @@
+let selectDeleteMode = 0; //この変数が1の時、削除、編集、複製を行えないようにする
+
 //名前、削除ボタン、編集ボタンを表示する要素を作成する。名前を引数として指定する
 function newItem(name) {
     let addElement = document.createElement("div");
@@ -27,6 +29,13 @@ function newItem(name) {
     duplicateButton.setAttribute("onclick", "duplicateItem(this)"); //複製ボタンを作成。このボタンがクリックされたら関数duplicateItemを実行する
     addElement.appendChild(duplicateButton); //生成されたaddElementに複製ボタンを追加
 
+    let deleteCheckBox = document.createElement("input");
+    deleteCheckBox.setAttribute("type", "checkbox");
+    deleteCheckBox.setAttribute("aria-hidden", "true"); //通常時は見えない
+    deleteCheckBox.className = "delete-checkbox";
+    deleteCheckBox.setAttribute("onclick", "selectItem(this)");
+    addElement.appendChild(deleteCheckBox); //選択用チェックボックスを作成。選択削除を実行する際に現れる。各itemの選択状況を管理
+
     return addElement;
 }
 
@@ -45,7 +54,7 @@ function addTodo() {
 
 //thisで指定された、つまりクリックされたタグのclass名を変更し、todo-itemの個数を再計算し、表示させる
 function completed(element){
-    if(document.getElementsByClassName("edit-item").length == 0){ //他に編集状態にあるitemが存在する場合は実行しない
+    if(document.getElementsByClassName("edit-item").length == 0 && selectDeleteMode == 0){ //他に編集状態にあるitemが存在する場合は実行しない
         if(element.parentNode.className === "todo-item"){
             element.parentNode.className = "completed-todo-item";
         }
@@ -79,14 +88,16 @@ function updateNumOfTodo(){
 
 //削除ボタンをクリックしたitemの表示を削除、LocalStrageからも削除
 function deleteItem(element){
+    if(selectDeleteMode == 0){
     element.parentNode.remove(); //ボタンの親のdivタグごと削除
     saveLocalStrage(); //削除された今の状態をLocalStrageに保存し直す。
     updateNumOfTodo();
+    }
 }
 
 //編集ボタンをクリックしたitemを編集状態に移らせる
 function editItem(element){
-    if(document.getElementsByClassName("edit-item").length == 0){ //他に編集状態にあるitemが存在する場合は実行しない
+    if(document.getElementsByClassName("edit-item").length == 0 && selectDeleteMode == 0){ //他に編集状態にあるitemが存在する場合は実行しない
         let eChildren = element.parentNode.children;
         let preItemName = eChildren[0].innerText; //編集前の名前を取得
 
@@ -121,6 +132,7 @@ function editComplete(element){
 
 //複製ボタンをクリックしたitemの名前と同じitemを生成する。
 function duplicateItem(element){
+    if(selectDeleteMode == 0){
     let eChildren = element.parentNode.children;
 
     let duplicatedItem = newItem(eChildren[0].innerText); //複製
@@ -128,6 +140,63 @@ function duplicateItem(element){
 
     updateNumOfTodo();
     saveLocalStrage();
+    }
+}
+
+//itemを選択された状態にする(再度チェックボックスを押すことで元の状態に)
+function selectItem(element){
+    let item = element.parentNode;
+    if(item.className == "todo-item"){
+        item.className = "selected-todo-item";
+    }
+    else{
+        item.className = "todo-item";
+    }
+}
+
+//まとめて削除するitemを選ぶ
+function selectItemForDelete(element){
+    selectDeleteMode = 1;
+
+    let checkboxes = document.getElementsByClassName("delete-checkbox"); 
+    for(let i = 0; i < checkboxes.length; i++){
+        checkboxes[i].setAttribute("aria-hidden", "false");
+    }  //全ての選択用チェックボックスを表示
+    
+    let deleteCompleteButton = document.createElement("button");
+    deleteCompleteButton.id = "deleteMode";
+    deleteCompleteButton.innerText = "選択したItemを削除";
+    deleteCompleteButton.setAttribute("onclick", "deleteSelectedItem()"); //選んだアイテムを削除するためのボタン
+    document.getElementById("selectMode").replaceWith(deleteCompleteButton); //選択中はこちらに置き換える
+
+}
+
+//選択したitemをまとめて削除する
+function deleteSelectedItem(){
+    let newItems = document.createElement("div");
+    newItems.id = "nowitems";
+
+    let selectedItems = Array.from(document.getElementsByClassName("selected-todo-item"));
+    
+    for (let i in selectedItems){
+        selectedItems[i].remove();
+    } //選択したitemを削除
+
+    let checkboxes = document.getElementsByClassName("delete-checkbox"); 
+    for(let i = 0; i < checkboxes.length; i++){
+        checkboxes[i].setAttribute("aria-hidden", "true");
+    }  //全ての選択用チェックボックスを非表示に戻す
+
+    saveLocalStrage(); //その状態をlocalStrageに保存
+
+    let deleteSelectButton = document.createElement("button");
+    deleteSelectButton.id = "selectMode";
+    deleteSelectButton.innerText = "選択削除"
+    deleteSelectButton.setAttribute("onclick", "selectItemForDelete(this)"); //最初に表示されているボタン
+    document.getElementById("deleteMode").replaceWith(deleteSelectButton); //戻す
+
+    updateNumOfTodo();
+    selectDeleteMode = 0;
 }
 
 //読み込まれた時の処理
