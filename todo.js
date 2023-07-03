@@ -1,4 +1,4 @@
-let selectDeleteMode = 0; //この変数が1の時、削除、編集、複製を行えないようにする
+let selectDeleteMode = 0; //この変数が非零の時、削除、編集、複製を行えないようにする
 
 //名前、削除ボタン、編集ボタンを表示する要素を作成する。名前を引数として指定する
 function newItem(name) {
@@ -54,7 +54,7 @@ function addTodo() {
 
 //thisで指定された、つまりクリックされたタグのclass名を変更し、todo-itemの個数を再計算し、表示させる
 function completed(element){
-    if(document.getElementsByClassName("edit-item").length == 0 && selectDeleteMode == 0){ //他に編集状態にあるitemが存在する場合は実行しない
+    if(document.getElementsByClassName("edit-item").length == 0 && selectDeleteMode == 0){ //他に編集,削除状態にあるitemが存在する場合は実行しない
         if(element.parentNode.className === "todo-item"){
             element.parentNode.className = "completed-todo-item";
         }
@@ -97,7 +97,7 @@ function deleteItem(element){
 
 //編集ボタンをクリックしたitemを編集状態に移らせる
 function editItem(element){
-    if(document.getElementsByClassName("edit-item").length == 0 && selectDeleteMode == 0){ //他に編集状態にあるitemが存在する場合は実行しない
+    if(document.getElementsByClassName("edit-item").length == 0 && selectDeleteMode == 0){ //他に編集、削除状態にあるitemが存在する場合は実行しない
         let eChildren = element.parentNode.children;
         let preItemName = eChildren[0].innerText; //編集前の名前を取得
 
@@ -149,9 +149,15 @@ function selectItem(element){
     if(item.className == "todo-item"){
         item.className = "selected-todo-item";
     }
-    else{
-        item.className = "todo-item";
+    else if(item.className == "completed-todo-item"){
+        item.className = "selected-completed-todo-item";
     }
+    else if(item.className == "selected-todo-item"){
+        item.className ="todo-item";
+    }
+    else{
+        item.className = "completed-todo-item";
+    } //クラス名がトグルになるように完了時と分ける
 }
 
 //まとめて削除するitemを選ぶ
@@ -181,6 +187,12 @@ function deleteSelectedItem(){
     for (let i in selectedItems){
         selectedItems[i].remove();
     } //選択したitemを削除
+
+    let selectedCompletedItems = Array.from(document.getElementsByClassName("selected-completed-todo-item"));
+    
+    for (let i in selectedCompletedItems){
+        selectedCompletedItems[i].remove();
+    } //選択した完了済みのitemを削除
 
     let checkboxes = document.getElementsByClassName("delete-checkbox"); 
     for(let i = 0; i < checkboxes.length; i++){
