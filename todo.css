@@ -2,6 +2,10 @@
     text-decoration: line-through;
 }
 
+.selected-completed-todo-item{
+    text-decoration: line-through;
+}
+
 .delete-checkbox[aria-hidden="true"]{
     display: none;
 }
